@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QMainWindow, QLabel
+import webbrowser
 
 class FrontEnd:
 
@@ -8,19 +8,22 @@ class FrontEnd:
         self.win = QWidget()
         self.layout = QGridLayout()
         self.da_graph = MyGraph()
+        self.i = 0
 
     def set_gui(self):
 
-        self.layout.addWidget(self.da_graph, 1, 1)
+        self.layout.addWidget(self.da_graph, 0, 0)
+        
         search_button = QPushButton('Search')
-        self.layout.addWidget(search_button, 0, 1)
+        search_button.clicked.connect(self.update_result)
+        self.layout.addWidget(search_button, 2, 0)
 
         reset_button = QPushButton('Reset')
         reset_button.clicked.connect(self.reset)
-        self.layout.addWidget(reset_button,2,1)
+        self.layout.addWidget(reset_button, 1, 0)
 
 #        Where the URL will go
-#        self.layout.addWidget(self.da_graph, 1, 2)
+        self.layout.addWidget(QPushButton(''), 3, 0)
 
         self.win.setLayout(self.layout)
         self.win.show()
@@ -30,7 +33,13 @@ class FrontEnd:
 
     def reset(self):
         self.da_graph = MyGraph()
-        self.layout.addWidget(self.da_graph, 1, 1)
+        self.layout.addWidget(self.da_graph, 0, 0)
+
+    def update_result(self):
+        self.i += 1
+        result_button = QPushButton('*Image Link Go Here*: ' + str(self.i))
+        result_button.clicked.connect(lambda: webbrowser.open_new_tab('stackoverflow.com'))
+        self.layout.addWidget(result_button, 3, 0)
 
     # Returns a list of lists, where each sublist contains tuples representing the body parts
     # So the first index of the first list, is the left hand, the next index would be the left elbow, etc.
