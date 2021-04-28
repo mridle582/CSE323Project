@@ -43,9 +43,27 @@ class FrontEnd:
 
     def update_result(self):
         self.i += 1
+        from BackEnd import compareposes
+        posedata = self.get_points()
+        pose = compareposes.Pose()
+        pose.head = posedata[1]
+        print(pose.head[0])
+        pose.leftShoulder = posedata[0][2]
+        pose.rightShoulder = posedata[2][2]
+        pose.leftElbow = posedata[0][1]
+        pose.rightElbow = posedata[2][1]
+        pose.leftWrist = posedata[0][0]
+        pose.rightWrist = posedata[2][0]
+        pose.leftHip = posedata[0][3]
+        pose.rightHip = posedata[2][3]
+        pose.leftKnee = posedata[0][4]
+        pose.rightKnee = posedata[2][4]
+        pose.leftAnkle = posedata[0][5]
+        pose.rightAnkle = posedata[2][5]
+        url = compareposes.get_closestpose(pose)
         result_button = QPushButton('*Image Link Go Here*: ' + str(self.i))
         result_button.setStyleSheet("background-color: #a89984")
-        result_button.clicked.connect(lambda: webbrowser.open_new_tab('stackoverflow.com'))
+        result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
         self.layout.addWidget(result_button, 3, 0)
 
     # Returns a list of lists, where each sublist contains tuples representing the body parts
@@ -54,15 +72,17 @@ class FrontEnd:
         left_vertices = self.da_graph.list_points['left']
         left_pts = [] #x,y points from hand to foot order
         for v in left_vertices:
-            left_pts.append((v.x, v.y))
+            point = [v.x, v.y]
+            left_pts.append(point)
 
         head_vertex = self.da_graph.list_points['head']
-        head_pt = [(head_vertex[0].x, head_vertex[0].y)]
+        head_pt = [head_vertex[0].x, head_vertex[0].y]
 
         right_vertices = self.da_graph.list_points['right']
         right_pts = [] # same and left points but for the right side
         for v in right_vertices:
-            right_pts.append((v.x, v.y))
+            point = [v.x, v.y]
+            right_pts.append(point)
 
         return [left_pts, head_pt, right_pts]
 
