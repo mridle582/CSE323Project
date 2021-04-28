@@ -17,5 +17,5 @@ lanklex lankley
 ranklex rankley
 poseimage2.url ...
 
-each image treats 0,0 as the center of the image
+each image treats 0,0 as the bottom left corner of the image
 BackEnd code be here

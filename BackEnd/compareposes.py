@@ -84,22 +84,3 @@ def get_closestpose(mannequin):
     #find best closeness out of closeratings and set that index to be chosen (lowest number is the best)
     chosen = closeratings.index(min(closeratings))
     return poses[chosen][0]
-
-#test pose based off of the sixth pose
-test = Pose()
-test.head = [-0.8, 7.91]
-test.leftShoulder = [-2.91, 5.0]
-test.rightShoulder = [2.0, 5.15]
-test.leftElbow = [-5.5, 1.70]
-test.rightElbow = [6.1, 1.9]
-test.leftWrist = [-4.7, 6.2]
-test.rightWrist = [3.7, -0.71]
-test.leftHip = [-2.0, -1.80]
-test.rightHip = [2.8, -1.3]
-test.leftKnee = [-3.1, -7.0]
-test.rightKnee = [2.2, -6.8]
-test.leftAnkle = [-3.5, -13.1]
-test.rightAnkle = [2.3, -13.2]
-
-print(get_closestpose(test))
-#test sort of works but i think i need to redo the pose data with the same canvas size for every picture & ofc add more
