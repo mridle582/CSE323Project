@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QMainWindow
 import webbrowser
 
 class FrontEnd:
@@ -159,7 +159,11 @@ class DraggablePoint:
             line_x = [self.parent.list_points[body_part][-1].x, self.x]
             line_y = [self.parent.list_points[body_part][-1].y, self.y]
 
-            self.line = Line2D(line_x, line_y, color='r', alpha=0.5)
+            if body_part == 'left':
+                self.line = Line2D(line_x, line_y, color='g', alpha=0.5)
+            else: 
+                self.line = Line2D(line_x, line_y, color='r', alpha=0.5)
+
             parent.fig.axes[0].add_line(self.line)
 
         elif self.body_part == 'head':
