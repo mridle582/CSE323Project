@@ -1,4 +1,8 @@
 import math
+import os
+
+working_dir = os.path.dirname(__file__)
+
 class Pose:
     head = []
     leftShoulder = []
@@ -16,7 +20,7 @@ class Pose:
 
 #Read pose data from file
 poses = []
-with open('BackEnd\poses.txt', 'r') as input:
+with open(os.path.join(working_dir, "poses.txt"), 'r') as input:
     
     while True:
         line = input.readline()
