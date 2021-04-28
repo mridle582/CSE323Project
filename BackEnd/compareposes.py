@@ -59,7 +59,7 @@ poses_path = ""
 #print(os.getcwd())
 
 working_dir = os.getcwd()
-poses_path = "\\BackEnd\\poses.txt"
+poses_path = "\\BackEnd\\poses.txt" if sys.platform == "win32" else "/BackEnd/poses.txt"
 
 #Read pose data from file
 poses = []
