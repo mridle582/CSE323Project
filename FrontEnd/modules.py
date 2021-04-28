@@ -5,7 +5,9 @@ class FrontEnd:
 
     def __init__(self):
         self.app = QApplication([])
+        self.app.setApplicationName("CSE323-Project")
         self.win = QWidget()
+        self.win.setStyleSheet("background-color: #282828;")
         self.layout = QGridLayout()
         self.da_graph = MyGraph()
         self.i = 0
@@ -15,15 +17,19 @@ class FrontEnd:
         self.layout.addWidget(self.da_graph, 0, 0)
         
         search_button = QPushButton('Search')
+        search_button.setStyleSheet("background-color: #a89984")
         search_button.clicked.connect(self.update_result)
         self.layout.addWidget(search_button, 2, 0)
 
         reset_button = QPushButton('Reset')
+        reset_button.setStyleSheet("background-color: #a89984")
         reset_button.clicked.connect(self.reset)
         self.layout.addWidget(reset_button, 1, 0)
 
 #        Where the URL will go
-        self.layout.addWidget(QPushButton(''), 3, 0)
+        result_button = QPushButton("")
+        result_button.setStyleSheet("background-color: #a89984")
+        self.layout.addWidget(result_button, 3, 0)
 
         self.win.setLayout(self.layout)
         self.win.show()
@@ -38,6 +44,7 @@ class FrontEnd:
     def update_result(self):
         self.i += 1
         result_button = QPushButton('*Image Link Go Here*: ' + str(self.i))
+        result_button.setStyleSheet("background-color: #a89984")
         result_button.clicked.connect(lambda: webbrowser.open_new_tab('stackoverflow.com'))
         self.layout.addWidget(result_button, 3, 0)
 
@@ -79,9 +86,17 @@ class MyGraph(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
 
         self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.fig.set_facecolor("#282828")
+
+
         self.axes = self.fig.add_subplot(111)
 
-        self.axes.grid(True)
+        self.axes.set_facecolor("#3c3836")
+
+        self.axes.grid(False)
+
+        self.axes.get_xaxis().set_visible(False)
+        self.axes.get_yaxis().set_visible(False)
 
         FigureCanvas.__init__(self, self.fig)
         self.setParent(parent)
@@ -93,7 +108,6 @@ class MyGraph(FigureCanvas):
 
         # To store draggable points
         self.list_points = {'left': [], 'head': [], 'right': []}
-
 
 #        self.show()
         self.plotDraggablePoints()
@@ -145,7 +159,7 @@ class DraggablePoint:
     def __init__(self, parent, body_part, x=0.1, y=0.1, size=0.1):
 
         self.parent = parent
-        self.point = patches.Ellipse((x, y), size, size, fc='#3f3f3f', alpha=0.5, edgecolor='#282828') if body_part != 'head' else patches.Ellipse((x, y), 2*size, 2*size, fc='#3f3f3f', alpha=0.5, edgecolor='#282828')
+        self.point = patches.Ellipse((x, y), size, size, fc='#1d2021', alpha=0.5, edgecolor='#ebdbb2') if body_part != 'head' else patches.Ellipse((x, y), 2*size, 2*size, fc='#282828', alpha=0.5, edgecolor='#ebdbb2')
         self.x = x
         self.y = y
         parent.fig.axes[0].add_patch(self.point)
@@ -159,10 +173,7 @@ class DraggablePoint:
             line_x = [self.parent.list_points[body_part][-1].x, self.x]
             line_y = [self.parent.list_points[body_part][-1].y, self.y]
 
-            if body_part == 'left':
-                self.line = Line2D(line_x, line_y, color='g', alpha=0.5)
-            else: 
-                self.line = Line2D(line_x, line_y, color='r', alpha=0.5)
+            self.line = Line2D(line_x, line_y, color='#d79921', alpha=0.75) if body_part == 'left' else Line2D(line_x, line_y, color='#fb4934', alpha=0.75)
 
             parent.fig.axes[0].add_line(self.line)
 
@@ -264,8 +275,10 @@ class DraggablePoint:
             
         
         if self.body_part == 'head':
-            print('moved head')
-        elif self == self.parent.list_points[self.body_part][0]:
+            canvas.blit(axes.bbox)
+            return
+        
+        if self == self.parent.list_points[self.body_part][0]:
             # The first point is especial because it has no line
             line_x = [self.x, self.parent.list_points[self.body_part][1].x]
             line_y = [self.y, self.parent.list_points[self.body_part][1].y]      
