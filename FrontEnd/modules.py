@@ -42,7 +42,6 @@ class FrontEnd:
         self.layout.addWidget(self.da_graph, 0, 0)
 
     def update_result(self):
-        self.i += 1
         from BackEnd import compareposes
         posedata = self.get_points()
         pose = compareposes.Pose()
@@ -61,7 +60,7 @@ class FrontEnd:
         pose.leftAnkle = posedata[0][5]
         pose.rightAnkle = posedata[2][5]
         url = compareposes.get_closestpose(pose)
-        result_button = QPushButton('*Image Link Go Here*: ' + str(self.i))
+        result_button = QPushButton(str(url)[:30]+"...")
         result_button.setStyleSheet("background-color: #a89984")
         result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
         self.layout.addWidget(result_button, 3, 0)
