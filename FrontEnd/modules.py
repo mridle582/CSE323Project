@@ -1,5 +1,7 @@
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QMainWindow
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QPushButton, QMainWindow, QComboBox, QLabel, QHBoxLayout
 import webbrowser
+
+fg = "background-color: #a89984"
 
 class FrontEnd:
 
@@ -7,29 +9,49 @@ class FrontEnd:
         self.app = QApplication([])
         self.app.setApplicationName("CSE323-Project")
         self.win = QWidget()
+        self.win.setFixedSize(500, 600)
         self.win.setStyleSheet("background-color: #282828;")
         self.layout = QGridLayout()
+        self.layout.setColumnStretch(0,1)
+        self.layout.setColumnStretch(6,1)
         self.da_graph = MyGraph()
         self.i = 0
+        self.search_criteria = "None"
 
     def set_gui(self):
 
-        self.layout.addWidget(self.da_graph, 0, 0)
+        self.layout.addWidget(self.da_graph, 1, 1)
+
+        # Sets up the drop down menu box
+        option_box = QComboBox()
+        box_bg = QHBoxLayout()
+        label  = QLabel('Focus Search:')
+        label.setFixedSize(100, 20)
+        label.setStyleSheet("QLabel { color : #a89984;  }")
+        option_box.addItem('None')
+        option_box.addItem('Upper')
+        option_box.addItem('Lower')
+        option_box.setFixedSize(100, 20)
+        option_box.setStyleSheet(fg)
+        option_box.activated[str].connect(self.set_search_criteria)
+        box_bg.addWidget(label)
+        box_bg.addWidget(option_box)
+        self.layout.addLayout(box_bg, 2, 1)
         
-        search_button = QPushButton('Search')
-        search_button.setStyleSheet("background-color: #a89984")
-        search_button.clicked.connect(self.update_result)
-        self.layout.addWidget(search_button, 2, 0)
-
         reset_button = QPushButton('Reset')
-        reset_button.setStyleSheet("background-color: #a89984")
+        reset_button.setStyleSheet(fg)
         reset_button.clicked.connect(self.reset)
-        self.layout.addWidget(reset_button, 1, 0)
+        self.layout.addWidget(reset_button, 3, 1)
 
-#        Where the URL will go
+        search_button = QPushButton('Search')
+        search_button.setStyleSheet(fg)
+        search_button.clicked.connect(self.update_result)
+        self.layout.addWidget(search_button, 4, 1)
+
+#       Where the URL will go
         result_button = QPushButton("")
-        result_button.setStyleSheet("background-color: #a89984")
-        self.layout.addWidget(result_button, 3, 0)
+        result_button.setStyleSheet(fg)
+        self.layout.addWidget(result_button, 5, 1)
 
         self.win.setLayout(self.layout)
         self.win.show()
@@ -61,7 +83,7 @@ class FrontEnd:
         pose.rightAnkle = posedata[2][5]
         url = compareposes.get_closestpose(pose)
         result_button = QPushButton(str(url)[:30]+"...")
-        result_button.setStyleSheet("background-color: #a89984")
+        result_button.setStyleSheet(fg)
         result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
         self.layout.addWidget(result_button, 3, 0)
 
@@ -85,7 +107,9 @@ class FrontEnd:
 
         return [left_pts, head_pt, right_pts]
 
-
+    def set_search_criteria(self, criteria):
+        self.search_criteria = criteria
+        print(self.search_criteria)
 
 
 
