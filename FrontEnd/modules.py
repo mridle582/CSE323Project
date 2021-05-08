@@ -53,8 +53,6 @@ class FrontEnd:
         result_box = QComboBox()
         result_box.setStyleSheet(fg)
         result_box.addItem("Select # To Show")
-        for i in range(5):
-            result_box.addItem(str(i+1))
         result_box.activated[str].connect(self.set_num_to_show)
         result_bg = QHBoxLayout()
         result_button = QPushButton("Click to show images")
@@ -68,6 +66,7 @@ class FrontEnd:
 
 #        self.result_button = result_button
         self.result_bg = result_bg
+        self.result_box = result_box
 
         self.win.setLayout(self.layout)
         self.win.show()
@@ -101,7 +100,16 @@ class FrontEnd:
         result_button = QPushButton(str(url)[:30]+"...")
         result_button.setStyleSheet(fg)
         result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
-        self.result_bg.removeItem(self.result_bg.takeAt(self.result_bg.count()-1))
+        
+        from random import randrange
+    
+        if 1 < self.result_box.count():
+            for i in range(1, self.result_box.count()):
+                self.result_box.removeItem(self.result_box.count()-1)
+        for i in range(randrange(1, 10)):
+            self.result_box.addItem(str(i+1))
+
+        self.result_bg.removeItem(self.result_bg.takeAt(2))
         self.result_bg.addWidget(result_button)
 
     # Returns a list of lists, where each sublist contains tuples representing the body parts
