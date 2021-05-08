@@ -66,6 +66,9 @@ class FrontEnd:
         result_bg.addWidget(result_button)
         self.layout.addLayout(result_bg, 5, 1)
 
+#        self.result_button = result_button
+        self.result_bg = result_bg
+
         self.win.setLayout(self.layout)
         self.win.show()
 
@@ -74,7 +77,7 @@ class FrontEnd:
 
     def reset(self):
         self.da_graph = MyGraph()
-        self.layout.addWidget(self.da_graph, 0, 0)
+        self.layout.addWidget(self.da_graph, 1, 1)
 
     def update_result(self):
         from BackEnd import compareposes
@@ -98,7 +101,8 @@ class FrontEnd:
         result_button = QPushButton(str(url)[:30]+"...")
         result_button.setStyleSheet(fg)
         result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
-        self.layout.addWidget(result_button, 3, 0)
+        self.result_bg.removeItem(self.result_bg.takeAt(self.result_bg.count()-1))
+        self.result_bg.addWidget(result_button)
 
     # Returns a list of lists, where each sublist contains tuples representing the body parts
     # So the first index of the first list, is the left hand, the next index would be the left elbow, etc.
