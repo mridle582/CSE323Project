@@ -17,6 +17,7 @@ class FrontEnd:
         self.da_graph = MyGraph()
         self.i = 0
         self.search_criteria = "None"
+        self.num_to_show = 1
 
     def set_gui(self):
 
@@ -26,32 +27,44 @@ class FrontEnd:
         option_box = QComboBox()
         box_bg = QHBoxLayout()
         label  = QLabel('Focus Search:')
-        label.setFixedSize(100, 20)
         label.setStyleSheet("QLabel { color : #a89984;  }")
         option_box.addItem('None')
         option_box.addItem('Upper')
         option_box.addItem('Lower')
-        option_box.setFixedSize(100, 20)
         option_box.setStyleSheet(fg)
         option_box.activated[str].connect(self.set_search_criteria)
         box_bg.addWidget(label)
         box_bg.addWidget(option_box)
         self.layout.addLayout(box_bg, 2, 1)
-        
-        reset_button = QPushButton('Reset')
-        reset_button.setStyleSheet(fg)
-        reset_button.clicked.connect(self.reset)
-        self.layout.addWidget(reset_button, 3, 1)
+
+        search_bg = QHBoxLayout()
 
         search_button = QPushButton('Search')
         search_button.setStyleSheet(fg)
         search_button.clicked.connect(self.update_result)
-        self.layout.addWidget(search_button, 4, 1)
+        self.layout.addWidget(search_button, 3, 1)
+
+        reset_button = QPushButton('Reset')
+        reset_button.setStyleSheet(fg)
+        reset_button.clicked.connect(self.reset)
+        self.layout.addWidget(reset_button, 4, 1)
 
 #       Where the URL will go
-        result_button = QPushButton("")
+        result_box = QComboBox()
+        result_box.setStyleSheet(fg)
+        result_box.addItem("Select # To Show")
+        for i in range(5):
+            result_box.addItem(str(i+1))
+        result_box.activated[str].connect(self.set_num_to_show)
+        result_bg = QHBoxLayout()
+        result_button = QPushButton("Click to show images")
         result_button.setStyleSheet(fg)
-        self.layout.addWidget(result_button, 5, 1)
+        result_label = QLabel("Results:")
+        result_label.setStyleSheet("QLabel { color : #a89984;    }")
+        result_bg.addWidget(result_label)
+        result_bg.addWidget(result_box)
+        result_bg.addWidget(result_button)
+        self.layout.addLayout(result_bg, 5, 1)
 
         self.win.setLayout(self.layout)
         self.win.show()
@@ -111,7 +124,13 @@ class FrontEnd:
         self.search_criteria = criteria
         print(self.search_criteria)
 
-
+    def set_num_to_show(self, num):
+        try:
+            self.num_to_show = int(num)
+            print(self.num_to_show)
+        except:
+            print("Defaulting to 1")
+            self.num_to_show = 1
 
 import matplotlib
 matplotlib.use("Qt5Agg")
