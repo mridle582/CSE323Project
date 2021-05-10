@@ -102,7 +102,7 @@ class FrontEnd:
         pose.rightAnkle = posedata[2][5]
 
         self.urls = compareposes.get_closestpose(pose, self.num_to_show)
-        print(self.urls)        
+        #print(self.urls)        
 
     def update_result(self):
         result_button = QPushButton(str(self.num_to_show) + " Images Ready")
@@ -143,15 +143,15 @@ class FrontEnd:
         from BackEnd import compareposes
         self.search_criteria = criteria
         compareposes.set_preference(criteria)
-        print(self.search_criteria)
+        #print(self.search_criteria)
         
 
     def set_num_to_show(self, num):
         try:
             self.num_to_show = int(num)
-            print(self.num_to_show)
+         #   print(self.num_to_show)
             self.set_urls()
-            print(self.urls)        
+          #  print(self.urls)        
             result_button = QPushButton(str(self.num_to_show) + " Images Ready")
             result_button.setStyleSheet(fg)
 
@@ -161,7 +161,7 @@ class FrontEnd:
             self.result_bg.removeItem(self.result_bg.takeAt(2))
             self.result_bg.addWidget(result_button)
         except:
-            print("Defaulting to 1")
+            #print("Defaulting to 1")
             self.num_to_show = 1
         
 
