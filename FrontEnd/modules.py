@@ -53,6 +53,9 @@ class FrontEnd:
         result_box = QComboBox()
         result_box.setStyleSheet(fg)
         result_box.addItem("Select # To Show")
+        result_box.addItem("1")
+        result_box.addItem("2")
+        result_box.addItem("3")
         result_box.activated[str].connect(self.set_num_to_show)
         result_bg = QHBoxLayout()
         result_button = QPushButton("Click to show images")
@@ -96,19 +99,14 @@ class FrontEnd:
         pose.rightKnee = posedata[2][4]
         pose.leftAnkle = posedata[0][5]
         pose.rightAnkle = posedata[2][5]
-        url = compareposes.get_closestpose(pose)
-        result_button = QPushButton(str(url)[:30]+"...")
-        result_button.setStyleSheet(fg)
-        result_button.clicked.connect(lambda: webbrowser.open_new_tab(url))
+        urls = compareposes.get_closestpose(pose, self.num_to_show)
         
-        from random import randrange
-    
-        if 1 < self.result_box.count():
-            for i in range(1, self.result_box.count()):
-                self.result_box.removeItem(self.result_box.count()-1)
-        for i in range(randrange(1, 10)):
-            self.result_box.addItem(str(i+1))
+        result_button = QPushButton(str(self.num_to_show) + " Images Ready")
+        result_button.setStyleSheet(fg)
 
+        #Note: you need to change this to open ALL the urls not just the last one
+        result_button.clicked.connect(lambda: webbrowser.open_new_tab(urls[self.num_to_show-1]))
+        
         self.result_bg.removeItem(self.result_bg.takeAt(2))
         self.result_bg.addWidget(result_button)
 
@@ -133,8 +131,11 @@ class FrontEnd:
         return [left_pts, head_pt, right_pts]
 
     def set_search_criteria(self, criteria):
+        from BackEnd import compareposes
         self.search_criteria = criteria
+        compareposes.set_preference(criteria)
         print(self.search_criteria)
+        
 
     def set_num_to_show(self, num):
         try:
@@ -143,6 +144,8 @@ class FrontEnd:
         except:
             print("Defaulting to 1")
             self.num_to_show = 1
+        
+
 
 import matplotlib
 matplotlib.use("Qt5Agg")
