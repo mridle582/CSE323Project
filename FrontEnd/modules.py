@@ -18,6 +18,7 @@ class FrontEnd:
         self.i = 0
         self.search_criteria = "None"
         self.num_to_show = 1
+        self.urls = None
 
     def set_gui(self):
 
@@ -81,7 +82,7 @@ class FrontEnd:
         self.da_graph = MyGraph()
         self.layout.addWidget(self.da_graph, 1, 1)
 
-    def update_result(self):
+    def set_urls(self):
         from BackEnd import compareposes
         posedata = self.get_points()
         pose = compareposes.Pose()
@@ -99,16 +100,24 @@ class FrontEnd:
         pose.rightKnee = posedata[2][4]
         pose.leftAnkle = posedata[0][5]
         pose.rightAnkle = posedata[2][5]
-        urls = compareposes.get_closestpose(pose, self.num_to_show)
-        
+
+        self.urls = compareposes.get_closestpose(pose, self.num_to_show)
+        print(self.urls)        
+
+    def update_result(self):
         result_button = QPushButton(str(self.num_to_show) + " Images Ready")
         result_button.setStyleSheet(fg)
 
+        self.set_urls()
         #Note: you need to change this to open ALL the urls not just the last one
-        result_button.clicked.connect(lambda: webbrowser.open_new_tab(urls[self.num_to_show-1]))
+        result_button.clicked.connect(self.open_urls)
         
         self.result_bg.removeItem(self.result_bg.takeAt(2))
         self.result_bg.addWidget(result_button)
+
+    def open_urls(self):
+        for i in range(self.num_to_show):
+            webbrowser.open_new_tab(self.urls[i])
 
     # Returns a list of lists, where each sublist contains tuples representing the body parts
     # So the first index of the first list, is the left hand, the next index would be the left elbow, etc.
@@ -141,6 +150,16 @@ class FrontEnd:
         try:
             self.num_to_show = int(num)
             print(self.num_to_show)
+            self.set_urls()
+            print(self.urls)        
+            result_button = QPushButton(str(self.num_to_show) + " Images Ready")
+            result_button.setStyleSheet(fg)
+
+            #Note: you need to change this to open ALL the urls not just the last one
+            result_button.clicked.connect(self.open_urls)
+            
+            self.result_bg.removeItem(self.result_bg.takeAt(2))
+            self.result_bg.addWidget(result_button)
         except:
             print("Defaulting to 1")
             self.num_to_show = 1
