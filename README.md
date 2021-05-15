@@ -9,4 +9,6 @@
 <br />
 <br />
 
-<center><img src="https://user-images.githubusercontent.com/68788406/118363174-23ae1b00-b561-11eb-86be-77f1ae39f98e.png" alt="image be missing"></center>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68788406/118363174-23ae1b00-b561-11eb-86be-77f1ae39f98e.png" alt="image be missing">
+</p>
