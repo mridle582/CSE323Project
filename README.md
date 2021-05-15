@@ -9,6 +9,4 @@
 <br />
 <br />
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68788406/116457665-ad57ac00-a831-11eb-9d12-8efead65765d.png" alt="image be missing"/>
-</p>
+![image](https://user-images.githubusercontent.com/68788406/118363174-23ae1b00-b561-11eb-86be-77f1ae39f98e.png)
