@@ -1,4 +1,4 @@
-# CSE323Project
+# Mannequin Poses
 
 - Dependencies:
 
